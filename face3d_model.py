@@ -1,7 +1,6 @@
 import sys
 sys.path.append('../3DDFA_V2')
 import os
-from FaceBoxes import models
 from utils.functions import draw_landmarks 
 import cv2
 import torch
@@ -77,7 +76,6 @@ class ComposeModel(nn.Module):
         R, offset, alpha_shp, alpha_exp = _parse_param(param)
         vertex = torch.transpose((self.u_base + self.w_shp_base @ alpha_shp + self.w_exp_base @ alpha_exp).reshape(-1, 3), 0, 1)
         pts3d =  torch.transpose(R@vertex + offset, 0, 1)
-        import ipdb;ipdb.set_trace()
         return pts3d
     
     def postprocess(self, pts3d):
@@ -92,7 +90,7 @@ class ComposeModel(nn.Module):
         return np.array(pts3d, dtype=np.float32)
 
 def test_compose_model():
-    face = cv2.imread('crop_face.png')
+    face = cv2.imread('data/crop_face.png')
     model = ComposeModel()
     with torch.no_grad():
         input_tensor = model.preprocess(face)
@@ -110,6 +108,7 @@ def ConvertTOOnnx():
     model.eval()
     dummy_input = torch.randn(1, 3, model.size, model.size)
     out_onnx = './models/face3d.onnx'
+    print(f'writing onnx model to {out_onnx}')
     torch.onnx.export(
         model,
         (dummy_input,),
@@ -120,6 +119,6 @@ def ConvertTOOnnx():
     
 
 if __name__ == '__main__':
-    # original_result(True)
+    original_result(True)
     test_compose_model()
-    # ConvertTOOnnx()
+    ConvertTOOnnx()

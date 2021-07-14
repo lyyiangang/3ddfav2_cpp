@@ -14,12 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 add_definitions(-fPIC)
 find_package(Threads REQUIRED)
-# find_package(OpenCV REQUIRED PATHS /install_x86/)
 set(LIB_DIR ../third_party/MNN/libs)
 set(INC_DIR ../third_party/MNN/include ../third_party/imageHelper)
 
-# MESSAGE( " *** OpenCV_INCLUDE_DIRS : " ${OpenCV_INCLUDE_DIRS} )
-# MESSAGE( " *** OpenCV_LIBS : " ${OpenCV_LIBS} )
 MESSAGE("lib dir:" ${LIB_DIR})
 MESSAGE("INC_DIR:" ${INC_DIR})
 
@@ -36,4 +33,4 @@ LINK_DIRECTORIES(
 )
 
 add_executable(mnn_demo ${SRC})
-target_link_libraries(mnn_demo PRIVATE  ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT}  MNN)
+target_link_libraries(mnn_demo PRIVATE  ${CMAKE_THREAD_LIBS_INIT}  MNN)
